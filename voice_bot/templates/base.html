@@ -1,21 +1,25 @@
 {% load static %}
 {% load i18n %}
-
+{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat</title>
-
-    {#    < Chat js >#}
-    <title>WebRTC Audio Recording using MediaStreamRecorder</title>
+    <title>Bot</title>
 
     <script src="https://cdn.WebRTC-Experiment.com/MediaStreamRecorder.js"></script>
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
 </head>
 <body>
-
+<button value="Play" onclick="play()"></button>
+<script>
+    function play() {
+        speechSynthesis.speak(
+            new SpeechSynthesisUtterance("{{ commands }}")
+        );
+    }
+</script>
 <section class="experiment">
 
     <br>

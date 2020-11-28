@@ -35,4 +35,4 @@ def home(request):
     :param request:
     :return: render with main page
     """
-    return render(request, 'base.html')
+    return render(request, 'base.html', {"commands": "Привет"})
