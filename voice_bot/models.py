@@ -19,7 +19,7 @@ class Bot(models.Model):
     # Language selection
     language = models.IntegerField(choices=LANG)
     # Name
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name + ", " + "Language: " + self.get_language()
