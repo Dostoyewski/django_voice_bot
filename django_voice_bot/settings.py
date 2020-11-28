@@ -53,7 +53,8 @@ ROOT_URLCONF = 'django_voice_bot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join('voice_bot', 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
