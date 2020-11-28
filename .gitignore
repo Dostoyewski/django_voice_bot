@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+migrations
+
+# DB file
+db.sqlite3
+
 # Pycharm files
 /.idea/
 
