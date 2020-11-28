@@ -37,3 +37,16 @@ class Bot(models.Model):
             return 'de-DE'
         elif self.language == 3:
             return 'fr-FR'
+
+
+class Command(models.Model):
+    """
+    Command class
+    Needs to be attached to bot
+    """
+    # Link to bot object
+    bot = models.ForeignKey(Bot, on_delete=models.CASCADE, to_field='name')
+    # command description
+    description = models.CharField(max_length=500)
+    # Redirect URL
+    redirect_url = models.CharField(max_length=150)
