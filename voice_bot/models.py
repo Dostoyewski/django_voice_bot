@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse
 
 LANG = (
     (0, "Русский"),
@@ -77,10 +76,8 @@ class Command(models.Model):
         """
         if self.redirect_url[0:3] == "www":
             return "https://" + self.redirect_url
-        elif self.redirect_url[0:3] == "htt":
-            return self.redirect_url
         else:
-            return reverse(self.redirect_url)
+            return self.redirect_url
 
     def check_msg(self, msg):
         """

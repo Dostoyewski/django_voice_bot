@@ -12,7 +12,7 @@ def upload(request):
     """
     Recognizes speech and make redirects
     :param request: POST XMLHttpRequest with speech file to process
-    :return: redirect to page corresponding command or error message
+    :return: url to page corresponding command or error message
     """
     bot_name = request.META['HTTP_BOTID']
 
