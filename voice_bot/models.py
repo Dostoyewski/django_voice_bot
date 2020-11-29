@@ -21,6 +21,31 @@ API_URL = (
     (1, "Message will be updated using API URL")
 )
 
+REPEAT = (
+    (0, "Don't repeat all commands on failure"),
+    (1, "Repeat all commands on failure")
+)
+
+
+def process_text(commands, speech_full):
+    """
+    Constructs detailed text with commands info
+    :param commands: commands queryset
+    :param speech_full: if True will speech all triiger words
+    :return: beautified commands info
+    """
+    text = "Мои команды: "
+    for command in commands:
+        text += command.description + ", " + " для выполнения произнесите "
+        text += command.get_triggers()[0]
+        if speech_full:
+            wsets = command.get_triggers()
+            for i, wset in enumerate(wsets):
+                if i != 0:
+                    text += " или " + wset
+        text += " ; "
+    return text
+
 
 class Bot(models.Model):
     """
@@ -41,6 +66,8 @@ class Bot(models.Model):
     # Bot failure messages, should be splitten with comma
     failure_messages = models.CharField(max_length=500, help_text="Bot failure messages, "
                                                                   "should be splitten with comma")
+    # Flag to repeat commands on failure
+    repeat_commands = models.IntegerField(choices=REPEAT, default=0)
 
     def __str__(self):
         return self.name + ", " + "Language: " + self.get_language()
@@ -69,11 +96,18 @@ class Bot(models.Model):
 
     def get_failure_message(self):
         """
-        Returns random failure message
+        Returns random failure message with repeating all commands
         :return:
         """
         wset = self.failure_messages.split(sep=',')
-        return wset[randrange(len(wset))]
+        text = wset[randrange(len(wset))]
+        if not self.repeat_commands:
+            return text
+        else:
+            text += ". Напоминаю: "
+            commands = Command.objects.filter(bot=self.name)
+            text += process_text(commands, self.speech_full)
+            return text
 
 
 class Command(models.Model):
