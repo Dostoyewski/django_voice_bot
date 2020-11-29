@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 LANG = (
     (0, "Русский"),
@@ -61,3 +62,34 @@ class Command(models.Model):
                                                "Sets of code words must be separated by a comma, "
                                                "and code words in the set must "
                                                "be separated by a space.")
+
+    def get_triggers(self):
+        """
+        Returns trigger words
+        :return:
+        """
+        return self.trigger_words.split(sep=',')
+
+    def process_redirect(self):
+        """
+        Redirects to page
+        :return:
+        """
+        if self.redirect_url[0:3] == "www":
+            return "https://" + self.redirect_url
+        elif self.redirect_url[0:3] == "htt":
+            return self.redirect_url
+        else:
+            return reverse(self.redirect_url)
+
+    def check_msg(self, msg):
+        """
+        checks, if msg is equals to trigger words
+        :param msg: recognized message
+        :return: bool
+        """
+        words = self.trigger_words.split(sep=',')
+        for word in words:
+            if msg in word:
+                return True
+        return False
