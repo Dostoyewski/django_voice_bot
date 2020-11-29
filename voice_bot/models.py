@@ -1,5 +1,7 @@
+import ast
 from random import randrange
 
+import requests
 from django.db import models
 
 LANG = (
@@ -14,7 +16,12 @@ FULL = (
     (1, "Speech all triggers")
 )
 
-# TODO Make decorator to register Bot for some page
+API_URL = (
+    (0, "Message will be set default"),
+    (1, "Message will be updated using API URL")
+)
+
+
 class Bot(models.Model):
     """
     Bot model
@@ -91,6 +98,32 @@ class Command(models.Model):
                                                "Sets of code words must be separated by a comma, "
                                                "and code words in the set must "
                                                "be separated by a space.")
+    # execution custom message
+    message = models.CharField(max_length=500, default="", blank=True,
+                               help_text="Custom message that will be displayed when the"
+                                         " command is executed. Leave empty for the "
+                                         "default option")
+    # callback URL to updating message
+    api_url = models.CharField(max_length=150, help_text="API URL to update message", default="", blank=True)
+    # API using flag
+    api_flag = models.IntegerField(choices=API_URL, default=0, help_text="Flag that will handle message")
+    # Header that will be used to extract data from api response
+    api_header = models.CharField(max_length=200, default="", blank=True,
+                                  help_text="API header, "
+                                            "that will be used to extract data")
+    # Request headers
+    requests_headers = models.CharField(max_length=500, default="", blank=True, help_text="request headers,"
+                                                                                          "should be written as json")
+
+    def process_API(self):
+        """
+        Loads data from API and updates message
+        :return:
+        """
+        if self.api_flag:
+            response = requests.get(self.api_url, headers=self.requests_headers)
+            if response.status_code == 200:
+                self.message = ast.literal_eval(response.text.replace("\r\n", ' '))[self.api_header]
 
     def get_triggers(self):
         """
@@ -117,6 +150,18 @@ class Command(models.Model):
         """
         words = self.trigger_words.split(sep=',')
         for word in words:
-            if msg in word:
+            if msg.lower() in str(word).lower():
                 return True
         return False
+
+    def get_message(self):
+        """
+        return success message
+        :return:
+        """
+        self.process_API()
+        if self.message == "":
+            bot = Bot.objects.get(name=self.bot)
+            return bot.get_success_message()
+        else:
+            return self.message

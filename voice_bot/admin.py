@@ -10,6 +10,15 @@ class BotAdmin(admin.ModelAdmin):
 
 
 @admin.register(Command)
-class BotAdmin(admin.ModelAdmin):
-    list_display = ('description', 'bot', 'redirect_url',)
+class CommandAdmin(admin.ModelAdmin):
+    list_display = ['bot', 'redirect_url', 'description']
     search_fields = ['bot', 'redirect_url']
+    fieldsets = (
+        (None, {
+            'fields': ('description', 'bot', 'redirect_url', 'trigger_words', 'message')
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('api_flag', 'api_url', 'api_header'),
+        }),
+    )

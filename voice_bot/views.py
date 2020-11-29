@@ -37,7 +37,7 @@ def upload(request):
             if command.check_msg(msg):
                 url = command.process_redirect()
                 print(url)
-                return JsonResponse({'url': url, 'message': bot.get_success_message()})
+                return JsonResponse({'url': url, 'message': command.get_message()})
         return JsonResponse({'url': '/', 'message': bot.get_failure_message()})
     except UnknownValueError:
         return JsonResponse({'url': '/', 'message': bot.get_failure_message()})
