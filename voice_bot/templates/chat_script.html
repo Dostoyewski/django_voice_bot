@@ -102,8 +102,11 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == XMLHttpRequest.DONE) {
-                    console.log(xhr.response)
-                    window.location.replace(xhr.response);
+                    a = JSON.parse(xhr.response);
+                    speechSynthesis.speak(
+                        new SpeechSynthesisUtterance(a.message)
+                    );
+                    window.location.replace(a.url);
                 }
             }
             xhr.open('POST', 'upload/', true);

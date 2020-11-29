@@ -1,3 +1,5 @@
+from random import randrange
+
 from django.db import models
 
 LANG = (
@@ -7,6 +9,10 @@ LANG = (
     (3, "Francias")
 )
 
+FULL = (
+    (0, "Speech only first trigger"),
+    (1, "Speech all triggers")
+)
 
 # TODO Make decorator to register Bot for some page
 class Bot(models.Model):
@@ -20,6 +26,14 @@ class Bot(models.Model):
     language = models.IntegerField(choices=LANG)
     # Name
     name = models.CharField(max_length=100, unique=True)
+    # Speech full commands triggers
+    speech_full = models.IntegerField(choices=FULL)
+    # Bot success messages, should be splitten with comma
+    success_messages = models.CharField(max_length=500, help_text="Bot success messages, "
+                                                                  "should be splitten with comma")
+    # Bot failure messages, should be splitten with comma
+    failure_messages = models.CharField(max_length=500, help_text="Bot failure messages, "
+                                                                  "should be splitten with comma")
 
     def __str__(self):
         return self.name + ", " + "Language: " + self.get_language()
@@ -37,6 +51,22 @@ class Bot(models.Model):
             return 'de-DE'
         elif self.language == 3:
             return 'fr-FR'
+
+    def get_success_message(self):
+        """
+        Returns random success message
+        :return:
+        """
+        wset = self.success_messages.split(sep=',')
+        return wset[randrange(len(wset))]
+
+    def get_failure_message(self):
+        """
+        Returns random failure message
+        :return:
+        """
+        wset = self.failure_messages.split(sep=',')
+        return wset[randrange(len(wset))]
 
 
 class Command(models.Model):
