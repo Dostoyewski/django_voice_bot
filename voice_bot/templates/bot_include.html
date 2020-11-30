@@ -1,0 +1,26 @@
+<script src="https://cdn.WebRTC-Experiment.com/MediaStreamRecorder.js"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<button value="Play" onclick="play()"></button>
+<script>
+    function play() {
+        speechSynthesis.speak(
+            new SpeechSynthesisUtterance("{{ commands }}")
+        );
+    }
+</script>
+<section class="experiment">
+
+    <button id="start-recording">Start</button>
+    <button id="stop-recording" disabled>Stop</button>
+
+    <button id="pause-recording" disabled>Pause</button>
+    <button id="resume-recording" disabled>Resume</button>
+
+</section>
+
+<section class="experiment">
+    <div id="audios-container"></div>
+</section>
+
+{% include "chat_script.html" %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
