@@ -12,35 +12,34 @@ To install it, simply: ::
 Quick start
 -----------
 
-1. Add "voice-bot" to your INSTALLED_APPS setting like this ::
-
-
+1. Add "voice-bot" to your INSTALLED_APPS setting like this
+```
     INSTALLED_APPS = [
         ...
         'voice-bot',
     ]
-
-2. Include the bot URLconf in your project urls.py like this ::
-
-
-    path('/', include('voice-bot.urls')),
+```
+2. Include the bot URLconf in your project urls.py like this
+```python
+path('/', include('voice-bot.urls')),
+```
 
 3. Run ``python manage.py migrate`` to create the voice-bot models.
 
 4. To connect the bot to the view, you must specify the decorator ```@add_bot(bot_name='BOT_NAME')``` before the view.<br>
-5. Then insert to view template following code ::
-
-
-    {% include "voice-bot/bot_include.html" %}
+5. Then insert to view template following code
+```djangotemplate
+{% include "voice-bot/bot_include.html" %}
+```
  
-6. Modify your function as follows ::
-
-
-    @add_bot(bot_name='BOT_NAME')
+6. Modify your function as follows
+```python
+@add_bot(bot_name='BOT_NAME')
     def attached_function(request, **kwargs):
         ...
         return render(request, 'your_template_name.html', {"commands": kwargs['commands'],
                                                            "bot_name": kwargs['bot_name']}
+```
 7. Start the development server and visit ```http://127.0.0.1:8000/admin/```
    to create a voice-bot (you'll need the Admin app enabled).
 
