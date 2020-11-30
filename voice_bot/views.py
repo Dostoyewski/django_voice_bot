@@ -52,12 +52,3 @@ def home(request, **kwargs):
     """
     return render(request, 'base.html', {"commands": kwargs['commands'],
                                          "bot_name": kwargs['bot_name']})
-
-
-def test(request):
-    """
-    Main page with active bot
-    :param request:
-    :return: render with main page
-    """
-    return render(request, 'test.html')

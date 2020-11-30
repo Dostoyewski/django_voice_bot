@@ -195,7 +195,6 @@ class Command(models.Model):
         """
         self.process_API()
         if self.message == "":
-            bot = Bot.objects.get(name=self.bot)
-            return bot.get_success_message()
+            return self.bot.get_success_message()
         else:
             return self.message

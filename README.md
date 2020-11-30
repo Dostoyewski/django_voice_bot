@@ -1,5 +1,9 @@
 # django_voice_bot
 Package for django support bot with speech recognition and voice commands.<br>
+
+Installation
+------------
+
 To connect the bot to the view, you must specify the decorator ```@add_bot(bot_name='BOT_NAME')``` before the view.<br>
 In the admin panel, you need to set the bot's language, name, and messages about successful and unsuccessful command execution.<br>
 The```speech_full``` flag will play all trigger phrases for all bot commands when activated.<br>
